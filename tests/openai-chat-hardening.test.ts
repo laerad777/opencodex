@@ -135,6 +135,18 @@ describe("openai-chat non-stream response hardening", () => {
       }]);
     }
   });
+
+  test("treats null tool calls as absent", async () => {
+    const adapter = createOpenAIChatAdapter(provider());
+    const events = await adapter.parseResponse!(new Response(JSON.stringify({
+      choices: [{ message: { role: "assistant", content: "OK", tool_calls: null } }],
+    })));
+
+    expect(events).toEqual([
+      { type: "text_delta", text: "OK" },
+      { type: "done", usage: undefined, stopReason: undefined },
+    ]);
+  });
 });
 
 describe("openai-chat stream response hardening", () => {
@@ -198,6 +210,21 @@ describe("openai-chat stream response hardening", () => {
         usage: { inputTokens: 7, outputTokens: 2 },
       }]);
     }
+  });
+
+  test("treats null streaming tool calls as absent", async () => {
+    const adapter = createOpenAIChatAdapter(provider());
+    const response = new Response([
+      `data: ${JSON.stringify({ choices: [{ delta: { content: "OK", tool_calls: null } }] })}\n\n`,
+      `data: ${JSON.stringify({ choices: [{ delta: {}, finish_reason: "stop" }] })}\n\n`,
+      "data: [DONE]\n\n",
+    ].join(""));
+
+    const events = await collect(adapter.parseStream(response));
+    expect(events).toEqual([
+      { type: "text_delta", text: "OK" },
+      { type: "done", usage: undefined, stopReason: undefined },
+    ]);
   });
 });
 

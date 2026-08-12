@@ -969,7 +969,7 @@ export function createOpenAIChatAdapter(provider: OcxProviderConfig): ProviderAd
           }
 
           const rawToolCalls = delta.tool_calls;
-          if (rawToolCalls !== undefined) {
+          if (rawToolCalls !== undefined && rawToolCalls !== null) {
             // A claimed tool-call payload is not benign padding. Dropping it can leave the
             // matching result permanently orphaned, so malformed nested shapes fail closed
             // through the adapter error channel instead of escaping as TypeError (#1325).
@@ -1140,7 +1140,7 @@ export function createOpenAIChatAdapter(provider: OcxProviderConfig): ProviderAd
         if (reasoningText !== undefined) events.push({ type: "reasoning_raw_delta", text: reasoningText });
         if (typeof msg.content === "string") events.push({ type: "text_delta", text: msg.content });
         const rawToolCalls = msg.tool_calls;
-        if (rawToolCalls !== undefined) {
+        if (rawToolCalls !== undefined && rawToolCalls !== null) {
           if (!Array.isArray(rawToolCalls)) return [invalidToolCallsEvent(usage)];
           for (const rawToolCall of rawToolCalls) {
             if (!isRecord(rawToolCall) || !isRecord(rawToolCall.function)) {
