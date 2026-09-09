@@ -1277,7 +1277,7 @@ export const PROVIDER_REGISTRY: readonly ProviderRegistryEntry[] = [
       supportsServiceTier: true,
       chatServiceTier: true,
     },
-    fastTierDescription: "Priority processing, 2x token price",
+    fastTierDescription: "Priority processing; tier pricing applies on key auth only",
     featured: true,
     oauthId: "xai",
     jawcodeBundle: "xai",

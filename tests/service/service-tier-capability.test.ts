@@ -119,7 +119,7 @@ describe("xAI Fast capability follows the captured authentication transport", ()
       capability: true,
       eligibility: "eligible",
       forwardCallerTier: true,
-      fastTierDescription: "Priority processing, 2x token price",
+      fastTierDescription: "Priority processing; tier pricing applies on key auth only",
     });
 
     const oauthPolicy = fastPolicyForModel(xaiProvider("oauth"), "grok-4.6", "xai");
@@ -136,7 +136,7 @@ describe("xAI Fast capability follows the captured authentication transport", ()
     expect(keyCatalog?.service_tiers).toEqual([{
       id: "priority",
       name: "Fast",
-      description: "Priority processing, 2x token price",
+      description: "Priority processing; tier pricing applies on key auth only",
     }]);
     expect(keyCatalog?.additional_speed_tiers).toEqual(["fast"]);
     expect(decideTier(keyPolicy, true, undefined)).toEqual({ kind: "set", value: "priority" });
@@ -150,7 +150,7 @@ describe("xAI Fast capability follows the captured authentication transport", ()
     expect(oauthCatalog?.service_tiers).toEqual([{
       id: "priority",
       name: "Fast",
-      description: "Priority processing, 2x token price",
+      description: "Priority processing; tier pricing applies on key auth only",
     }]);
     expect(oauthCatalog?.additional_speed_tiers).toEqual(["fast"]);
     expect(decideTier(oauthPolicy, true, undefined)).toEqual({ kind: "set", value: "priority" });
